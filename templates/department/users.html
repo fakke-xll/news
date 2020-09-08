@@ -1,0 +1,350 @@
+{% extends 'department/base.html' %} {% block head %}
+
+<style>
+  .radio-inline{
+    margin-left: 20px;
+    float: left;
+  }
+  
+</style>
+{% endblock head %} {%block main %}
+
+<div class="main" style="padding: 2%;background-color: white;">
+  <button type="button" style="margin-bottom: 20px;" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+    添加用户
+  </button>
+  
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">添加用户</h4>
+        </div>
+        <div class="modal-body">
+         
+          <div class="card">
+            
+            <div class="card-body">
+              
+              <form class="form-horizontal" action="#" method="post" enctype="multipart/form-data" onsubmit="return false;">
+                <div class="form-group">
+                  <label  class="col-sm-2 control-label">用户名</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="add_inputName" name="add_name" placeholder="用户名">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputPassword3" class="col-sm-2 control-label">邮箱</label>
+                  <div class="col-sm-10">
+                    <input type="email" class="form-control" name='add_email' id="inputEmail" placeholder="邮箱">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" name='add_password1' id="add_inputPassword" placeholder="密码">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="inputPassword3" class="col-sm-2 control-label">确认密码</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" name='add_password2' id="add_inputPassword2" placeholder="确认密码">
+                  </div>
+                </div>
+                <div class="form-controls">
+                  <label for="inputPassword3" class="col-sm-2 control-label">性别</label>
+                  <div class="col-sm-10">
+                  <select name="add_gender" class="form-control" id="add_gender">
+                  
+                      <option value="男" >男</option>
+                      <option value="女" >女</option>
+                      <option value="保密" >保密</option>
+                 
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+          <button type="button" class="btn btn-primary" id='add-btn'>确认添加</button>
+        </div>
+      </div>
+    </div>
+  
+  
+  </div>
+  
+      <table class="table table-hover table-bordered">
+        <thead>
+          <tr>
+            <th>序号</th>
+            <th>用户名</th>
+            <th>性别</th>
+           
+            <th>邮箱</th>
+         
+            <th>注册时间</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for user in g.department.users %}
+          {% if user.is_delete == 0 %}
+          
+          
+          <tr class="tr"  data-id="{{ user.id  }}" data-name="{{ user.name }}" data-email="{{ user.email  }}" data-pwd="{{ user.password }}" data-gender="{{ user.gender }}" data-role="{{ user.role }}">
+            <td style="width: 7%;" class="number"></td>
+            <td style="width: 10%;">{{ user.name }}</td>
+            <td style="width: 7%;">{{ user.gender }}</td>
+         
+            <td style="width: 15%;">{{ user.email }}</td>
+          
+            <td style="width: 10%;">{{ "%s-%s-%s" | format(user.addtime.year,user.addtime.month,user.addtime.day) }}</td>
+            <td style="text-align: center;width: 9%;">
+              <button type="button" class="btn btn-primary btn-sm edit-btn" data-toggle="modal" data-target="#myeditModal">
+                修改
+            </button>
+            
+            <div class="modal fade" id="myeditModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">修改用户信息</h4>
+                  </div>
+                  <div class="modal-body">
+                   
+                    <div class="card">
+                      
+                      <div class="card-body">
+                        
+                        <input type="hidden" name="user_id" value=""/>
+                          <div class="form-group">
+                            <label  class="col-sm-2 control-label">用户名</label>
+                            <div class="col-sm-10">
+                              <input type="text" class="form-control" id="edit_inputName" name="edit_name" placeholder="用户名">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="inputPassword3" class="col-sm-2 control-label">邮箱</label>
+                            <div class="col-sm-10">
+                              <input type="email" class="form-control" name='edit_email' placeholder="邮箱" disabled>
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="edit_inputPassword" class="col-sm-2 control-label">密码</label>
+                            <div class="col-sm-10">
+                              <input type="password" class="form-control" name='edit_password1' id="edit_inputPassword1" placeholder="密码">
+                            </div>
+                          </div>
+                          <div class="form-group">
+                            <label for="edit_inputPassword2" class="col-sm-2 control-label">确认密码</label>
+                            <div class="col-sm-10">
+                              <input type="password" class="form-control" name='edit_password2' id="edit_inputPassword2" placeholder="确认密码">
+                            </div>
+                          </div>
+                          <div class="form-controls">
+                            <label for="edit_gender" class="col-sm-2 control-label">性别</label>
+                            <div class="col-sm-10">
+                            <select name="edit_gender" class="form-control" id="edit_gender">
+                            
+                                <option value="男" >男</option>
+                                <option value="女" >女</option>
+                                <option value="保密" >保密</option>
+                           
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    <button type="button" class="btn btn-primary" id='edit-confirm-btn'>确认修改</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+   
+              <button type="button" class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#myDelModal">
+                删除
+            </button>
+              
+              <div class="modal fade" id="myDelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                      <h4 class="modal-title" id="myModalLabel">删除</h4>
+                    </div>
+                    <div class="modal-body">
+                        <h4 class="modal-title" id="myModalLabel">确认删除此用户？</h4>
+                        </div>
+
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                      <button type="button" class="btn btn-primary " id='delete-confirm-btn'>确认删除</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+          </form>
+            </td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+          
+        </tbody>
+      </table>
+  </div>
+
+    {% endblock main %} {% block js %}
+    <script>
+      $(function() {
+        $("#add-btn").click(function(event) {
+          event.preventDefault();
+          
+          var name = $('input[name=add_name]').val();
+          var email = $('input[name=add_email]').val();
+          var password1 = $('input[name=add_password1]').val();          
+          var password2 = $('input[name=add_password2]').val();
+          var gender = $('#add_gender option:selected').val(); 
+
+          $.ajax({
+            url:'/department/user/',
+            type:'post',
+            data:{
+              name:name,
+              email:email,
+              password1:password1,
+              password2:password2,
+              gender:gender,
+            },
+            success:function(data){
+              if(data==='添加成功'){
+                alert("用户添加成功");
+                window.location.href = '/department/user/'
+              }
+            },
+            fail:function(errors){
+              console.log(errors)
+            }
+
+          })               
+
+        });
+      });
+
+
+      // {#    新闻列表序号增减#}
+  $(function() {
+    function number() {
+      for (var i = 0; i <= $(".tr").length; i++) {
+        $(".number").get(i).innerHTML = i + 1;
+      }
+    }
+
+    number();
+    
+  });
+
+
+  $(function(){
+    $(".edit-btn").click(function(event){
+        event.preventDefault();
+        var self = $(this);
+        var dialog = $("#myeditModal");
+
+        var tr = self.parent().parent();
+        
+        var user_id = tr.attr("data-id");
+        var name = tr.attr("data-name");
+        var email = tr.attr("data-email");  
+        // var password=tr.attr("data-password");
+        var gender = tr.attr("data-gender");
+
+
+        $('input[name=edit_name]').val(name);
+        $('input[name=edit_email]').val(email);
+        $('input[name=user_id]').val(user_id);
+        // $('input[name=edit_password1]').val(password);
+        $('#edit_gender').val(gender) ;
+    
+        //   数据发送
+
+    $("#edit-confirm-btn").click(function(event){
+        event.preventDefault();
+          
+        var name= $("input[name=edit_name]").val();
+        var email = $('input[name=edit_email]').val();
+        var password1 = $('input[name=edit_password1]').val();
+        var password2 = $('input[name=edit_password2]').val();
+        var gender = $('#edit_gender').val();
+        var user_id = $('input[name=user_id]').val();
+       
+
+
+        $.ajax({
+            url:'/department/user/',
+            type:'post',
+            data:{
+                user_id:user_id,
+                name:name,
+                password1:password1,
+                password2:password2,
+                gender:gender
+            },
+            success:function(data){
+                // console.log(data);
+                if(data === "修改成功"){
+                    alert("修改成功！")
+                  window.location.href = '/department/user/'
+                }
+            },
+            fail:function(errors){
+                // console.log("shibai")
+                console.log(errors)
+            }
+        })
+      })
+    })
+
+  });
+
+  $(function(){
+    $(".delete-btn").click(function(event){
+        event.preventDefault();
+        var self = $(this);
+        var tr = self.parent().parent();
+        var user_id= tr.attr("data-id");
+    
+        $('#delete-confirm-btn').click(function (event) {
+            event.preventDefault();
+
+            $.ajax({
+                url:'/department/user/',
+                type:'post',
+                data:{
+                  is_delete:1,
+                  user_id:user_id
+                },
+                success:function(data){
+                    if(data === "删除成功"){
+                      window.location.href = '/department/user/';
+                    }
+                },
+                fail:function(){
+
+                  }
+                })
+            })
+        })
+})
+    </script>
+
+    {% endblock js %}
+  </div>
+</div>

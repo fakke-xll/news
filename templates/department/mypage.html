@@ -1,0 +1,98 @@
+{% extends 'department/base.html' %} {% block main %}
+<div class="container-fluid">
+  {# {% set department = g.department %}#}
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-body">
+          <form method="post" action="" class="site-form">
+            <div class="form-group">
+              <label for="username">用户名</label>
+              <input
+                type="text"
+                class="form-control"
+                name="username"
+                id="username"
+                value="{{ g.department.name }}"
+              />
+            </div>
+            <!-- {#                            <div class="form-group">#}
+{#                                <label for="nickname">昵称</label>#}
+{#                                <input type="text" class="form-control" name="nickname" id="nickname"#}
+{#                                       placeholder="输入您的昵称" value="管理员">#}
+{#                            </div>#} -->
+            <div class="form-group">
+              <label for="email">邮箱</label>
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                id="email"
+                aria-describedby="emailHelp"
+                placeholder="请输入正确的邮箱地址"
+                value="{{ g.department.email }}"
+                disabled="disabled"
+              />
+              <!-- {#                                <small id="emailHelp" class="form-text text-muted">请保证您填写的邮箱地址是正确的。</small>#} -->
+            </div>
+            <div class="form-group">
+              <label for="remark">简介</label>
+              <textarea
+                placeholder="简要输入部门信息"
+                class="form-control"
+                name="info"
+                id="info"
+                rows="3"
+              >
+{% if g.department.info %}{{ g.department.info }}{% endif %}</textarea
+              >
+            </div>
+            <button type="submit" id="undo" class="btn btn-primary">
+              取消
+            </button>
+            <button type="submit" id="submit" class="btn btn-primary">
+              保存
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block js %}
+<script>
+  $(function() {
+    $("#submit").click(function(event) {
+      event.preventDefault();
+
+      var name = $("input[name=username]").val();
+      var info = $("textarea[name=info]").val();
+
+      $.ajax({
+        url: "/department/mypage/",
+        type: "post",
+        data: {
+          name: name,
+          info: info
+        },
+        success: function(data) {
+            if( data === "部门信息修改成功"){
+                alert(data);
+                window.location.href = '/department/mypage/'
+            }
+          
+        },
+        fail: function() {
+          alert("修改失败");
+        }
+      });
+    });
+
+    $("#undo").click(function(event) {
+      event.preventDefault();
+      window.location.href = "/department/mypage/";
+    });
+  });
+</script>
+{% endblock %}

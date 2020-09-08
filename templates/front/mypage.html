@@ -1,0 +1,566 @@
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>Highdmin - Responsive Bootstrap 4 Admin Dashboard</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <link rel="stylesheet"   href="{{ url_for('static',filename='front/mypage/node_modules/mdi/css/materialdesignicons.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='front/mypage/node_modules/simple-line-icons/css/simple-line-icons.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='front/mypage/}node_modules/flag-icon-css/css/flag-icon.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static',filename='front/mypage/node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css') }}">
+        
+      
+        <link rel="stylesheet" href="{{ url_for('static',filename='front/mypage/node_modules/dropify/dist/css/dropify.min.css') }}">
+        
+        <link rel="stylesheet" href="{{ url_for('static',filename='front/mypage/css/style.css') }}">
+        
+        <link rel="shortcut icon" href="{{ url_for('static',filename='front/mypage/images/favicon.png') }}" />
+      
+      
+       
+
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="{{ url_for('static',filename='front/base/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static',filename='front/base/css/icons.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static',filename='front/base/css/style.css') }}" rel="stylesheet" type="text/css" />
+
+        <script src="{{ url_for('static',filename='front/base/js/modernizr.min.js') }}"></script>
+        {% block head %}
+        
+        {% endblock head %}
+
+        <style>
+          .wrapper{
+              padding-top: 0;
+          }
+    
+      </style>
+    </head>
+
+    <body style="background-color: aliceblue;">
+        
+        <!-- Navigation Bar-->
+        <header id="topnav">
+            <div class="topbar-main">
+                <div class="container-fluid">
+
+                   
+
+                    
+                    <!-- end menu-extras -->
+
+                    <div class="clearfix"></div>
+
+                </div> <!-- end container -->
+            </div>
+            <!-- end topbar-main -->
+
+            <div class="navbar-custom">
+                <div class="container-fluid">
+                    <div id="navigation">
+                        <!-- Navigation Menu-->
+                        <ul class="navigation-menu">
+
+                            <li class="has-submenu">
+                                <a href="{{ url_for('front.index') }}"><i class="icon-speedometer"></i>新闻主页</a>
+                            </li>
+
+                            
+
+                            <li class="has-submenu">
+                                <a href="#"><i class="icon-layers"></i>新闻栏目</a>
+                                <ul class="submenu">
+                                    {% for tag in g.tags %}
+                                    {% if tag.is_delete == 0 %}
+                                    <li><a href="{{ url_for('front.tagnews',tag_id=tag.id) }}">{{ tag.name }}</a></li>
+                                    {% endif %}
+                                    
+                                    {% endfor %}   
+                                </ul>
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="#" ><i class="icon-briefcase"></i>发布部门</a>
+                                <ul class="submenu megamenu">
+                                    <li>
+                                        <ul>
+                                            {% for department in g.departments %}
+                                            {% if department.is_delete == 0 %}
+                                            <li class="department_id" id="{{ department.id }}"><a href="{{ url_for('front.depnews',department_id=department.id) }}">{{ department.name }}</a></li>
+                                            {% endif %}
+                                               
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            <li class="has-submenu float-right">
+                               {% if g.current_user %}
+                               <a  href="#" style="color:black">{{ g.current_user.email }}<i class="mdi mdi-chevron-down"></i></a>
+                               {% else %}
+                               <a  href="#" style="color:black">登录<i class="mdi mdi-chevron-down"></i></a>
+                               {% endif %}
+                                
+                                
+                                    <ul class="submenu megamenu">
+                                        <li>
+                                            <ul>
+                                                
+                                                 
+                                                <li><a href="{{ url_for('front.mypage') }}"></i>我的账户</a></li>
+                                                
+                                                <li><a href="{{ url_for('front.logout') }}">退出</a></li>
+                                                
+                                            </ul>
+                                        </li>
+                                        
+                                    </ul>
+                               
+                               
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="{{ url_for('front.questionlist') }}" ><i class="icon-briefcase"></i>问答主页</a>
+                                
+                            </li>
+
+                           
+
+                        </ul>
+                        
+                        <!-- End navigation menu -->
+
+                        
+                    </div> <!-- end #navigation -->
+                    
+                </div> <!-- end container -->
+            </div> <!-- end navbar-custom -->
+        </header>
+        <!-- End Navigation Bar-->
+
+
+        <div class="wrapper" style="margin-top: 65px;padding-top: 0;">
+            <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                  <div  style="min-height: 1786px;width: 85%;margin: auto;" >
+                    <div class="row user-profile">
+                      <div class="col-lg-4 side-left d-flex align-items-stretch">
+                        <div class="row">
+                          <div class="col-12 grid-margin stretch-card">
+                            <div class="card">
+                              <div class="card-body avatar">
+                                <h4 class="card-title">个人信息</h4>
+                                <img src="{{  url_for('static',filename='front/mypage/images/faces/face6.jpg') }}" alt="" />
+                                <p class="name">{{ g.current_user.name }}</p>
+                                <p class="designation">{{ g.current_user.department.name }}</p>
+                                <a class="d-block text-center text-dark" href="#"
+                                  >我的邮箱: <span >{{ g.current_user.email }}</span></a
+                                >
+                              </div>
+                            </div>
+                          </div>
+                          <div class="col-12 stretch-card">
+                            <div class="card">
+                              <div class="card-body overview">
+                                <ul class="achivements">
+                                  <li>
+                                    <a href="{{ url_for('front.mycomment') }}">
+                                    <p>{{ g.current_user.comments | mylen }}</p>
+                                    <p>我的评论</p>
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href="{{ url_for('front.myquestion') }}">
+                                    <p>{{ g.current_user.questions | mylen }}</p>
+                                    <p>我的问题</p>
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a href="{{ url_for('front.myanswer') }}">
+                                    <p>{{ g.current_user.answers | mylen }}</p>
+                                    <p>我的回复</p>
+                                    </a>
+                                  </li>
+                                </ul>
+                                
+                                <div class="wrapper about-user">
+              
+                                  <h4 class="card-title mt-4 mb-3">关于</h4>
+                                  <p>
+                                    个人简介.
+                                  </p>
+                                </div>
+                                
+                                <div class="info-links">
+                                  <a class="website" href="http://www.baidu.com/">
+                                    <i class="mdi mdi-earth text-gray"></i>
+                                    <span>http://www.baidu.com/</span>
+                                  </a>
+                                  <!-- <a class="social-link" href="#">
+                                    <i class="mdi mdi-facebook text-gray"></i>
+                                    <span>https://www.facebook.com/johndoe</span>
+                                  </a>
+                                  <a class="social-link" href="#">
+                                    <i class="mdi mdi-linkedin text-gray"></i>
+                                    <span>https://www.linkedin.com/johndoe</span>
+                                  </a> -->
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-8 side-right stretch-card">
+                        <div class="card">
+                          <div class="card-body">
+                            <div
+                              class="wrapper d-block d-sm-flex align-items-center justify-content-between"
+                            >
+                              <h4 class="card-title mb-0">详情</h4>
+                              <ul
+                                class="nav nav-tabs tab-solid tab-solid-primary mb-0"
+                                id="myTab"
+                                role="tablist"
+                              >
+                                <li class="nav-item">
+                                  <a
+                                    class="nav-link"
+                                    id="info-tab"
+                                    data-toggle="tab"
+                                    href="#info"
+                                    role="tab"
+                                    aria-controls="info"
+                                    aria-expanded="true"
+                                    aria-selected="false"
+                                    ><button class="btn-info btn-sm">个人信息</button></a
+                                  >
+                                </li>
+                               
+                                <li class="nav-item">
+                                  <a
+                                    class="nav-link"
+                                    id="security-tab"
+                                    data-toggle="tab"
+                                    href="#security"
+                                    role="tab"
+                                    aria-controls="security"
+                                    ><button class="btn-info btn-sm">安全</button>
+                                    </a
+                                  >
+                                </li>
+                              </ul>
+                            </div>
+                            <div class="wrapper">
+                              <hr />
+                              <div class="tab-content" id="myTabContent" >
+                                
+                                <div
+                                  class="tab-pane fade active show"
+                                  id="info"
+                                  role="tabpanel"
+                                  aria-labelledby="info"
+                                  data-id="{{ g.current_user.id }}"
+                                  data-name="{{ g.current_user.name }}"
+                                  data-email = "{{ g.current_user.email }}"
+                                  data-gender = "{{ g.current_user.gender }}"
+                                  data-department = "{{ g.current_user.department.name }}"
+                                  data-info = "{{ g.current_user.info }}"
+                                >
+                                <form action="#">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="edit_user_id"
+                                        name="edit_user_id"
+                                        hidden
+                                      />
+                                    <div class="form-group">
+                                      <label for="name">用户名</label>
+                                      <input
+                                        type="text"
+                                        class="form-control"
+                                        id="name"
+                                        name="edit_name"
+                                        
+                                      />
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="designation">性别</label>
+                                     
+                                      <select name="edit_gender" class="form-control" id="edit_gender" >
+                                        
+                                          <option value="男" >男</option>
+                                          <option value="女" >女</option>
+                                          <option value="保密" >保密</option>
+                                      </select>
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="edit_department">部门</label>
+                                      <select name="edit_department" class="form-control" id="edit_department" >
+                                        {% for department in g.departments %}
+                                        {% if department.is_delete == 0 %}
+                                        <option value="{{ department.name }}" >{{ department.name }}</option>
+                                        {% endif %}
+                                        {% endfor %}
+                                      </select>
+                                      
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="email">邮箱</label>
+                                      <input
+                                        type="email"
+                                        class="form-control"
+                                        id="edit_email"
+                                        name="edit_email"
+                                        disabled
+                                      />
+                                    </div>
+                                    <div class="form-group">
+                                      <label for="address">简介</label>
+                                      <textarea
+                                        name="edit_info"
+                                        id="edit_info"
+                                        rows="6"
+                                        class="form-control"
+                                      ></textarea>
+                                      
+                                    </div>
+                                  
+                                    <div class="form-group mt-5">
+                                      <button type="submit" class="btn btn-success mr-2" id='edit-btn'>
+                                        修改
+                                      </button>
+                                      <button class="btn btn-outline-danger" id='cancel-btn1'>取消</button>
+                                    </div>
+                                  </form>
+                                </div>
+                   
+                                <div
+                                  class="tab-pane fade"
+                                  id="security"
+                                  role="tabpanel"
+                                  aria-labelledby="security-tab"
+                                >
+                                  <form action="#">
+                                    <div class="form-group">
+                                      <input
+                                      type="text"
+                                      class="form-control"
+                                      id="edit_user_id"
+                                      name="pwd_user_id"
+                                      value="{{ g.current_user.id}}"
+                                      hidden
+                                    />
+                                      <label for="change-password">修改密码</label>
+                                      <input
+                                        type="password"
+                                        class="form-control"
+                                        id="old-password"
+                                        name = 'old_password'
+                                        placeholder="输入原密码"
+                                      />
+                                    </div>
+                                    <div class="form-group">
+                                      <input
+                                        type="password"
+                                        class="form-control"
+                                        id="new_password1"
+                                        name = "new_password1"
+                                        placeholder="输入新密码"
+                                      />
+                                    </div>
+                                    <div class="form-group">
+                                      <input
+                                        type="password"
+                                        class="form-control"
+                                        id="new_password2"
+                                        name="new_password2"
+                                        placeholder="确认密码"
+                                      />
+                                    </div>
+                                    <div class="form-group mt-5">
+                                      <button type="submit" class="btn btn-success mr-2" id='pwd-edit-btn'>
+                                        修改
+                                      </button>
+                                      <button class="btn btn-outline-danger" id='cancel-btn1'>取消</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                   
+            </div>   
+            </div>
+           
+        </div>
+        <!-- end wrapper -->
+        {% block main %}
+        
+        {% endblock main %}
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        2020 © xiangliangliang. - newssystem.com
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer -->
+        <script src="{{ url_for('static',filename='front/mypage/node_modules/jquery/dist/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/mypage/node_modules/popper.js/dist/umd/popper.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/mypage/node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/mypage/node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js') }}"></script>
+        <!-- endinject -->
+        <!-- Plugin js for this page-->
+        <script src="{{ url_for('static',filename='front/mypage/node_modules/dropify/dist/js/dropify.min.js') }}"></script>
+        <!-- End plugin js for this page-->
+        <!-- inject:js -->
+        <script src="{{ url_for('static',filename='front/mypage/js/off-canvas.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/mypage/js/hoverable-collapse.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/mypage/js/misc.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/mypage/js/settings.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/mypage/js/todolist.js') }}"></script>
+        <!-- endinject -->
+        <!-- Custom js for this page-->
+        <script src="{{ url_for('static',filename='front/mypage/js/dropify.js') }}"></script>
+
+
+        <!-- jQuery  -->
+        <script src="{{ url_for('static',filename='front/base/js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/base/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/base/js/waves.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/base/js/jquery.slimscroll.js') }}"></script>
+
+        <!-- App js -->
+        <script src="{{ url_for('static',filename='front/base/js/jquery.core.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/base/js/jquery.app.js') }}"></script>
+        {% block js %}
+        
+        {% endblock js %}
+        <script>
+  $(function(){
+        var tr =$("#edit-btn").parent().parent().parent();
+        var user_id = tr.attr("data-id");
+       
+        var name = tr.attr("data-name");
+        
+        var email = tr.attr("data-email");  
+    
+        var gender = tr.attr("data-gender");
+       
+        var department_name = tr.attr("data-department");
+        var info = tr.attr("data-info");
+        console.log(department_name)
+
+        $('input[name=edit_name]').val(name);
+        $('input[name=edit_email]').val(email);
+        $('input[name=edit_user_id]').val(user_id);
+        $('#edit_gender').val(gender);
+        $('#edit_department').val(department_name) ;
+        $('textarea[name=edit_info]').val(info);
+
+
+
+    $("#edit-btn").click(function(event){
+        event.preventDefault();
+
+        var name= $("input[name=edit_name]").val();
+        var email = $('input[name=edit_email]').val();
+        var gender = $('#edit_gender').val();
+        var user_id = $('input[name=edit_user_id]').val();
+        var department_name = $('#edit_department').val() ;
+        var info =  $('textarea[name=edit_info]').val();
+        // console.log(name);
+        // console.log(email);
+        // console.log(gender);
+
+        // console.log(user_id);
+        // console.log(department_name);
+        // console.log(info);
+       
+
+
+        $.ajax({
+            url:'/mypage/',
+            type:'post',
+            data:{
+                user_id:user_id,
+                name:name,
+                gender:gender,
+                department_name:department_name,
+                info:info
+            },
+            success:function(data){
+                if(data === "修改成功"){
+                    alert("修改成功！")
+                  window.location.href = '/mypage/'
+                }
+            },
+            fail:function(errors){
+                console.log(errors)
+            }
+        })
+      })
+  });
+
+
+  $(function(){
+    $("#pwd-edit-btn").click(function(event){
+        event.preventDefault();
+        var user_id = $('input[name=pwd_user_id]').val();
+        
+
+        var old_password = $('input[name=old_password]').val();
+        var new_password1 = $('input[name=new_password1]').val();
+        var new_password2 = $('input[name=new_password2]').val();
+        console.log(user_id);
+        console.log(old_password);
+    
+        $.ajax({
+            url:'/mypage/',
+            type:'post',
+            data:{
+                user_id:user_id,
+                old_password:old_password,
+                new_password1:new_password1,
+                new_password2:new_password2
+            },
+            success:function(data){
+                if(data === "修改成功"){
+                    alert("修改成功！")
+                  window.location.href = '/mypage/'
+                }
+            },
+            fail:function(errors){
+                console.log(errors)
+            }
+        });
+    });
+  });
+        </script>
+    </body>
+</html>
+
+
+
+
+

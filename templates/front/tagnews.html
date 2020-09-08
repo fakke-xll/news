@@ -1,0 +1,21 @@
+{% extends 'front/base.html' %}
+
+{% block main_left %}
+    {% for news in g.tag_news %}
+      <a href="{{ url_for('front.newsdetail',news_id=news.id) }}" style="text-decoration: none;">
+        <div class="card-box" style="margin-top: 10px;margin-bottom: 10px;padding-top: 10px;">
+            <span class="badge badge-danger">{{ news.tag.name }}</span>
+            <span class="header-title" style="font-size: 13px;margin-left: 10px;padding-top: 2px;" >{{ news.title }}</span>
+            <p class="text-muted m-b-20 font-14">
+                {{ news.content }}
+            </p>      
+            <span class="badge badge-info">发布部门：{{ news.department.name }}</span>
+            <span class="badge badge-purple" style="float: right;">发布时间：{{ news.addtime }}</span>
+            <span class="badge badge-success" style="float: right;margin-right: 20px;">评论：{{ news.comments | mylen  }}</span>   
+        </div>
+        </a>
+    {% endfor %}
+{% endblock main_left %}
+
+
+

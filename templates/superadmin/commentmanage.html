@@ -1,0 +1,228 @@
+{% extends 'superadmin/base.html' %} 
+{% block main %}
+<div class="container-fluid">
+  
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-toolbar clearfix">
+            <div class="toolbar-btn-action">
+              
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="table-responsive">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>序号</th>
+                    <th>评论内容</th>
+                    <th>新闻标题</th>
+                    <th>评论用户</th>
+                    <th>评论时间</th>     
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for comment in g.comments %} 
+                  {% if comment.is_delete == 0 and comment.news.tag.is_delete == 0 and comment.user.is_delete == 0 and comment.user.department.is_delete == 0 and comment.news.is_delete == 0 %}
+             
+                  <tr class="tr" data-id="{{ comment.id }}" data-content="{{ comment.content }}" data-news-content="{{ comment.news.content }}" data-news-title="{{ comment.news.title }}" data-user="{{ comment.user.name }}">
+                    <td class="number"></td>
+                   
+                    <td>{{ comment.content }}</td>
+                    <td>{{ comment.news.title }}</td>
+                    <td>{{ comment.user.name }}</td>
+                    <td>{{ comment.addtime }}</td>
+                   
+                    <td>
+                        <button type="button" class="btn btn-primary btn-sm edit-btn" data-toggle="modal" data-target="#myModal">
+                            修改
+                        </button>
+                        
+                          <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                              <form action="" method="post">  
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                  <h4 class="modal-title" id="myModalLabel">标题</h4>
+                                </div>
+                                
+                                <div class="modal-body">
+                                    <!-- 我的内容 -->
+                                    <input type="hidden" name="comment_id" value=""/>
+                                    <div class="form-group col-md-12">
+                                        <label for="comment_content">评论内容</label>
+                                        <input type="text" class="form-control" id="comment_content"" name="comment_content"  value="" />
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="news_title">新闻标题</label>
+                                        <input type="text" class="form-control" id="news_title"" name="news_title"  value="" disabled />
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="news_content">新闻内容</label>
+                                        <input type="text" class="form-control" id="news_content"" name="news_content"  value="" disabled />
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <label for="comment_user_name">评论用户</label>
+                                        <input type="text" class="form-control" id="comment_user_name"" name="comment_user_name"  value="" disabled />
+                                    </div>
+                                   
+                                  
+                                  
+                             
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                  <button type="button" class="btn btn-primary " id='modal-confirm-btn'>确认修改</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+               
+                          <button type="button" class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#myDelModal">
+                            删除
+                            </button>
+                          
+                          <div class="modal fade" id="myDelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                  <h4 class="modal-title" id="myModalLabel">删除</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <h4 class="modal-title" id="myModalLabel">确认删除此新闻？</h4>
+                                    </div>
+
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                                  <button type="button" class="btn btn-primary " id='delete-confirm-btn'>确认删除</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                      </form>
+                    </td>
+                  </tr>
+                  {% endif %}
+                  {% endfor %}
+                </tbody>
+              </table>
+              
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Button trigger modal -->
+</div>
+
+<!-- Modal -->
+
+{% endblock %} {% block js %}
+<script>
+
+  // {#    新闻列表序号增减#}
+  $(function() {
+    function number() {
+      for (var i = 0; i <= $(".tr").length; i++) {
+        $(".number").get(i).innerHTML = i + 1;
+      }
+    }
+
+    number();
+    
+  });
+
+
+// 给模态框添加默认值
+  $(function(){
+    $(".edit-btn").click(function(event){
+        event.preventDefault();
+        var self = $(this);
+        var dialog = $("#myModal");
+
+        var tr = self.parent().parent();
+        
+        var comment_id= tr.attr("data-id");
+        var news_title = tr.attr("data-news-title");
+        var news_content = tr.attr("data-news-content");  
+        var comment_content=tr.attr("data-content");
+        var user=tr.attr("data-user");
+
+        $('input[name=comment_content]').val(comment_content);
+        $('input[name=news_title]').val(news_title);
+        $('input[name=news_content]').val(news_content);
+        $('input[name=comment_user_name]').val(user);
+        $('input[name=comment_id]').val(comment_id)
+       
+    
+        //   数据发送
+    
+    $("#modal-confirm-btn").click(function(event){
+        event.preventDefault();
+        var comment_content = $('input[name=comment_content]').val();
+        var comment_id = $('input[name=comment_id]').val();
+       
+        $.ajax({
+            url:'/sp/comment/',
+            type:'post',
+            data:{
+                comment_id:comment_id,
+                comment_content:comment_content
+            },
+            success:function(data){
+                // console.log(data);
+                if(data === "修改成功"){
+                    alert("修改成功！")
+                  window.location.href = '/sp/comment/'
+                }
+            },
+            fail:function(errors){
+                // console.log("shibai")
+                console.log(errors)
+            }
+        })
+      })
+    })
+
+  });
+
+
+// 点击删除后的操作
+$(function(){
+    $(".delete-btn").click(function(event){
+        event.preventDefault();
+        var self = $(this);
+        var tr = self.parent().parent();
+        var comment_id= tr.attr("data-id");
+    
+        $('#delete-confirm-btn').click(function (event) {
+            event.preventDefault();
+    
+    
+            $.ajax({
+                url:'/sp/comment/',
+                type:'post',
+                data:{
+                  is_delete:1,
+                  comment_id:comment_id
+                },
+                success:function(data){
+                    if(data === "删除成功"){
+                      window.location.href = '/sp/comment/';
+                    }
+                },
+                fail:function(){
+
+                  }
+                })
+            })
+        })
+})
+
+</script>
+{% endblock %}

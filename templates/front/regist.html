@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Victory Admin</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet"   href="{{ url_for('static',filename='front/mypage/node_modules/mdi/css/materialdesignicons.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='front/mypage/node_modules/simple-line-icons/css/simple-line-icons.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='front/mypage/}node_modules/flag-icon-css/css/flag-icon.min.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='front/mypage/node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css') }}">
+    
+  
+    <link rel="stylesheet" href="{{ url_for('static',filename='front/mypage/node_modules/dropify/dist/css/dropify.min.css') }}">
+    
+    <link rel="stylesheet" href="{{ url_for('static',filename='front/mypage/css/style.css') }}">
+    
+    <link rel="shortcut icon" href="{{ url_for('static',filename='front/mypage/images/favicon.png') }}" />
+  
+  
+
+
+    
+  </head>
+
+  <body>
+    <div class="container-scroller">
+      <div class="container-fluid page-body-wrapper">
+        <div class="row">
+          <div
+            class="content-wrapper full-page-wrapper d-flex align-items-center auth register-full-bg"
+          >
+            <div class="row w-100">
+              <div class="col-lg-4 mx-auto">
+                <div class="auth-form-light text-left p-5">
+                  <h2>开始注册</h2>
+                  <h4 class="font-weight-light">欢迎来到新闻管理系统</h4>
+                  <form class="pt-4" action="" method="post">
+                    <div class="form-group">
+                      <label for="usernameInput">用户名</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="usernameInput"
+                        name = 'username'
+                      
+                      />
+                      
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">邮箱</label>
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="exampleInputEmail1"
+                        name = 'email'
+                      />
+                      
+                    </div>
+                    <div class="form-group">
+                      <label for="department">部门</label>
+                      <div class="form-controls">
+                          <select name="department" class="form-control" id="department">
+                              {% for department in g.departments %}
+                              {% if department.is_delete == 0 %}
+                              <option value="{{ department.id }}" style="direction: none;">{{ department.name }}</option>
+                              {% endif %} 
+                              {% endfor %}
+                          </select>
+                         
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword1">密码</label>
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="exampleInputPassword1"
+                        name = 'password1'
+                        
+                      />
+                     
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleInputPassword2">确认密码</label>
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="exampleInputPassword2"
+                        name= 'password2'
+                       
+                      />
+
+
+                      
+                    </div>
+                    <div class="mt-5" style="margin-top: 1rem !important;">
+                      
+                        <button class="btn btn-block btn-primary btn-lg font-weight-medium" id='regist-btn'>
+                          注册
+                        </button>
+                        
+                      
+                    </div>
+                 
+                    <div class="mt-2 text-center">
+                      <a href="{{ url_for('front.login') }}" class="auth-link text-black"
+                        >已经拥有账户?
+                        <span class="font-weight-medium">登录</span></a
+                      >
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- content-wrapper ends -->
+        </div>
+        <!-- row ends -->
+      </div>
+      <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <script src="{{ url_for('static',filename='front/mypage/node_modules/jquery/dist/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='front/mypage/node_modules/popper.js/dist/umd/popper.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='front/mypage/node_modules/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='front/mypage/node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js') }}"></script>
+    <!-- endinject -->
+    <script src="{{ url_for('static',filename='front/mypage/js/off-canvas.js') }}"></script>
+    <script src="{{ url_for('static',filename='front/mypage/js/hoverable-collapse.js') }}"></script>
+    <script src="{{ url_for('static',filename='front/mypage/js/misc.js') }}"></script>
+    <script src="{{ url_for('static',filename='front/mypage/js/settings.js') }}"></script>
+    <script src="{{ url_for('static',filename='front/mypage/js/todolist.js') }}"></script>
+    <!-- inject:js -->
+    <script>
+      $(function(){
+
+        $('#regist-btn').click(function(event){
+          event.preventDefault();
+
+          var username = $("input[name=username]").val();
+          var email = $("input[name=email]").val();
+          var department_id = $("#department").val();
+          var password1 = $("input[name=password1]").val();
+          var password2 = $("input[name=password2]").val();
+          console.log(department_id);
+          console.log(username);
+
+          $.post({
+            url:'/regist/',
+            // type:'post',
+            data:{
+              username:username,
+              email:email,
+              department_id:department_id,
+              password1:password1,
+              password2:password2
+            },
+            success:function(data){
+              
+                console.log(data);
+                if(data === "注册成功"){
+                  window.location.href = '/login/'
+                }
+            },
+            fail:function(errors){
+
+                console.log(errors)
+            }
+           
+
+          })
+
+
+        })
+
+      })
+
+
+
+    </script>
+ 
+  </body>
+</html>

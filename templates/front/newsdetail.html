@@ -1,0 +1,151 @@
+{% extends 'front/base.html' %} {% block head %} {% endblock head %} {% block
+main_left %}
+
+<div class="card-box task-detail" style="background-color:azure;">
+  <div class="media mt-0 m-b-30">
+    <!-- <img
+      class="d-flex mr-3 rounded-circle"
+      alt="64x64"
+      src="assets/images/users/avatar-2.jpg"
+      style="width: 48px; height: 48px;"
+    /> -->
+
+    <div class="media-body" id='news_id' data-dep-id="{{ g.news_detail.id }}">
+      <h5 class="media-heading mb-0 mt-0">
+        发布部门：{{ g.news_detail.department.name }}
+      </h5>
+      <span class="badge badge-danger" style="margin-top: 10px;">
+        栏目：{{ g.news_detail.tag.name }}
+      </span>
+    </div>
+  </div>
+  <hr />
+
+  <h4 class="m-b-20">{{ g.news_detail.title }}</h4>
+  <hr />
+
+  <p class="text-muted">
+    {{ g.news_detail.content }}
+  </p>
+  <hr />
+
+  <ul
+    class="list-inline task-dates m-b-0 "
+    style="margin-top: 0;height: 20px;padding-top: 0;"
+  >
+    <li>
+      <h5 class="m-b-5">评论数</h5>
+      <p>{{ g.comments | mylen }}条<small class="text-muted"></small></p>
+    </li>
+
+    <li>
+      <h5 class="m-b-5">发布时间</h5>
+      <p>{{ g.news_detail.addtime }} <small class="text-muted"></small></p>
+    </li>
+  </ul>
+  <div class="clearfix"></div>
+  
+
+  <hr style="margin-block-end:0" />
+  <div class="card-body pb-0">
+    <h6 class="card-title" style="font-size: large;">评论：</h6>
+    <!-- <hr style="margin-block-end:0" /> -->
+    <div class="row">
+      <div class="col-12">
+        <div class="wrapper border-bottom py-2" style="padding-left: 0;">
+
+          {% for comment in g.comments %}
+          {% if comment.is_delete == 0 %}
+          <hr style="margin-block-end:0" />
+          <div class="d-flex">
+            <!-- <img
+              class="img-sm rounded-circle"
+              style="width: 50px;height: 50px;"
+              src="{{ url_for('static',filename='front/mypage/images/faces/face2.jpg') }}"
+              alt=""
+            /> -->
+            <div class="wrapper ml-4" style="padding-top:0;width: 100%;" >
+              <p class="mb-0">用户：{{ comment.user.name }}</p>
+              <div style="display: block; width: 100%;">
+                <small class="text-muted mb-0">{{ comment.content }}</small>
+                <div style="float: right;">评论时间：{{ comment.addtime }}</div>
+              </div>
+             
+            </div>
+            
+          </div>
+          {% endif %}
+          
+          
+          {% endfor %}
+
+          
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <!-- <hr style="margin-block-start:0" /> -->
+  <div class="form-group">
+    <form action="">
+    <h6 class="card-title" style="font-size: large;padding-top: 20px;">添加评论</h6>
+    <div class="col-xs-12">
+      <textarea
+        class="form-control"
+        id="example-textarea-input"
+        name="example-textarea-input"
+        rows="6"
+        placeholder="内容.."
+      ></textarea>
+      <div style="float: right;margin: 10px;">
+        <button class="btn btn-secondary btn-w-md" type="button" id='undo-btn'>取消</button>
+        <button class="btn btn-success btn-w-md" type="button" id="confirm-btn">评论</button>
+      </div>
+    </div>
+  </form>
+    
+  </div>
+</div>
+{% endblock main_left %} 
+
+
+
+{% block js %}
+<script>
+  $(function(){
+    $("#confirm-btn").click(function(event){
+      event.preventDefault();
+      var content = $('textarea[name=example-textarea-input]').val();
+      var news_id = $('#news_id').attr('data-dep-id');
+
+      $.ajax({
+        // url:'/front/newslist/'+news_id,
+        type:'post',
+        data:{
+          content:content,
+          news_id:news_id
+        },
+        success:function(data){
+          alert(data);
+          if(data==="评论成功"){
+              window.location.href = '/newsdetail/'+ news_id +'/'
+          }
+        },
+          fail:function(errors){
+            console.log(errors);
+            alert('评论失败')
+            
+          }
+      })
+
+    })
+
+
+
+  })
+
+
+</script>
+
+
+{% endblock js %}

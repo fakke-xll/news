@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>超级管理员</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+
+<link href="{{ url_for('static',filename='department/base/css/bootstrap.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='department/base/css/materialdesignicons.min.css') }}" rel="stylesheet">
+<link href="{{ url_for('static',filename='department/base/css/style.css') }}" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static',filename='department/base/js/jconfirm/jquery-confirm.min.css') }}">
+{% block head %}
+
+{% endblock head %}
+</head>
+
+<body data-logobg="color_8" data-sidebarbg="color_8">
+<div class="lyear-layout-web">
+  <div class="lyear-layout-container">
+    <!--左侧导航-->
+    <aside class="lyear-layout-sidebar">
+
+      <!-- logo -->
+      <div id="logo" class="sidebar-header">
+        <h1 style="color: white;">系统管理员</h1>
+      </div>
+
+      <div class="lyear-layout-sidebar-scroll">
+
+        <nav class="sidebar-main">
+          <ul class="nav nav-drawer">
+            <li class="nav-item active"> <a href="{{ url_for('superadmin.index') }}"> 后台首页</a> </li>
+            <li class="nav-item nav-item-has-subnav">
+              <a href="{{ url_for('superadmin.index')  }}">系统首页</a>
+            </li>
+            <li class="nav-item nav-item-has-subnav">
+              <a href="{{ url_for('superadmin.usermanage') }}">用户管理</a>
+            </li>
+            <li class="nav-item nav-item-has-subnav">
+              <a href="{{ url_for('superadmin.depmanage') }}">部门管理</a>
+
+            </li>
+            <li class="nav-item nav-item-has-subnav">
+              <a href="{{ url_for('superadmin.tagmanage') }}">栏目管理</a>
+
+            </li>
+            <li class="nav-item nav-item-has-subnav">
+              <a href="{{ url_for('superadmin.newsmanage') }}">新闻管理</a>
+            </li>
+            <li class="nav-item nav-item-has-subnav">
+              <a href="{{ url_for('superadmin.commentmanage') }}">评论管理</a>
+            </li>
+            <li class="nav-item nav-item-has-subnav">
+              <a href="{{ url_for('superadmin.questionmanage') }}">问答管理</a>
+            </li>
+            <li class="nav-item nav-item-has-subnav">
+              <a href="{{ url_for('superadmin.answermanage') }}">回复管理</a>
+            <!-- </li>
+              <li class="nav-item nav-item-has-subnav">
+              <a href="">修改密码</a>
+            </li> -->
+          </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+          <p class="copyright">Copyright &copy; 2020.  All rights <a href="http://www.bootstrapmb.com/">reserved</a>. </p>
+        </div>
+      </div>
+
+    </aside>
+    <!--End 左侧导航-->
+
+    <!--头部信息-->
+    <header class="lyear-layout-header">
+
+      <nav class="navbar navbar-default">
+        <div class="topbar">
+
+          <div class="topbar-left">
+            <div class="lyear-aside-toggler">
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+              <span class="lyear-toggler-bar"></span>
+            </div>
+            <span class="navbar-page-title"> 后台首页 </span>
+          </div>
+
+          <ul class="topbar-right">
+            <li class="dropdown dropdown-profile">
+              <a href="javascript:void(0)" style="float: left" data-toggle="dropdown">
+                <img class="img-avatar img-avatar-48 m-r-10" src="{{ url_for('static',filename='department/base/images/avatar.jpg') }}" alt="管理员" />
+                    <span>{{ g.superadmin.name }}</span>
+                    <span ><span class="caret"></span></span>
+<!-- {#                  <span style="color: white">xxxxxx</span>#} -->
+                      <a style="display: inline-block" href="{{ url_for('superadmin.logout') }}">
+                          <span style="float: left;padding: 12px 20px" >
+                                 退出
+                          </span>
+                      </a>
+              </a>
+            </li>
+          </ul>
+
+        </div>
+      </nav>
+
+    </header>
+    <!--End 头部信息-->
+
+    <!--页面主要内容-->
+    <main class="lyear-layout-content">
+    {% block main %}
+    
+    {% endblock %}
+    </main>
+    <!--End 页面主要内容-->
+
+    
+  </div>
+</div>
+
+{% block js %}
+
+{% endblock %}
+<script type="text/javascript" src="{{ url_for('static',filename='department/base/js/Chart.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='department/base/js/jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='department/base/js/bootstrap.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='department/base/js/perfect-scrollbar.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='department/base/js/main.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename='department/base/js/jconfirm/jquery-confirm.min.js') }}"></script>
+</body>
+</html>

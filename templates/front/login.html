@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Form Validation - #073 of #100Days100Projects</title>
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static',filename='front/login/css/style.css') }}"
+    />
+  </head>
+  <body>
+   
+   
+  
+      <div class="container">
+
+        <div class="header">
+          <h2>欢迎来到新闻管理系统</h2>
+        </div>
+        <form id="form" class="form" method="post">
+          <!-- <div class="form-control">
+            <label for="username">用户名</label>
+            <input type="text" placeholder="用户名" id="username" />
+            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-exclamation-circle"></i>
+            <small>Error message</small>
+          </div> -->
+          <div class="form-control">
+            <label for="username">邮箱</label>
+            <input type="email" placeholder="请输有效入邮箱" name='email' id="email" />
+            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-exclamation-circle"></i>
+            <small>Error message</small>
+          </div>
+          <div class="form-control">
+            <label for="username">密码</label>
+            <input type="password" placeholder="密码" name='password' id="password" />
+            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-exclamation-circle"></i>
+            <small>Error message</small>
+          </div>
+          <!-- <div class="form-control">
+            <label for="username">确认密码</label>
+            <input type="password" placeholder="确认密码" id="password2" />
+            <i class="fas fa-check-circle"></i>
+            <i class="fas fa-exclamation-circle"></i>
+            <small>Error message</small>
+          </div> -->
+          <button id='login-btn'>登录</button>
+        </form>
+
+          <p style="text-align: center;margin-top: 0;"><a href="{{ url_for('front.regist') }}" style="text-decoration: none;"> 没有账户，点击注册！</a></p>
+      </div>
+  
+
+    
+  </div>
+  <script src="{{ url_for('static',filename='front/base/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static',filename='front/login/js/script.js') }}"></script>
+  <script>
+    $(function(){
+      $('#login-btn').click(function(event){
+        event.preventDefault();
+        var email = $('input[name=email]').val();
+        var password = $('input[name=password]').val();
+
+        $.ajax({
+          url:'/login/',
+          type:'post',
+          data:{
+            email:email,
+            password:password
+          },
+          success:function(data){
+            alert(data);
+            if(data === '登录成功'){
+              window.location.href = '/'
+            }
+          },
+          fail:function(errors){
+            console.log(console.error(s)
+            )
+          }
+        })
+      })
+    })
+
+
+  </script>
+
+  </body>
+</html>

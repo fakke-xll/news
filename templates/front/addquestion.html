@@ -1,0 +1,91 @@
+{% extends 'front/base.html' %}
+{% block main_left %}
+<div class="container-fluid">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form action="" method="post" class="row">
+                        <div class="form-group col-md-12">
+                            <label for="type">栏目</label>
+                            <div class="form-controls">
+                                <select name="type" class="form-control" id="type">
+                                    {% for tag in g.tags %}
+                                        <option value="{{ tag.id }}" >{{ tag.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-12">
+                            <label for="title">标题</label>
+                            <input type="text" class="form-control" id="title" name="title" value=""
+                                   placeholder="请输入标题"/>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <label for="seo_description">内容</label>
+                            <textarea class="form-control" id="seo_description" name="content" rows="10"
+                                       placeholder="新闻内容"></textarea>
+                        </div>
+
+                        <div class="form-group col-md-12">
+                            <button type="submit" class="btn btn-primary ajax-post" id="submit" target-form="add-form">确 定
+                            </button>
+                            <button type="button" class="btn btn-default" id="undo"
+                                    onclick="javascript:history.back(-1);return false;">取消
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+    
+    
+{% endblock main_left %}
+
+{% block js %}
+<script>
+    $(function () {
+        $("#submit").click(function (event) {
+            event.preventDefault();
+            var tag = $('#type').val();
+            var title = $("input[name=title]").val();
+            var content = $("textarea[name=content]").val();
+
+            $.ajax({
+                url:'/addquestion/',
+                type:'post',
+                data:{
+                    tag:tag,
+                    title:title,
+                    content:content
+                },
+                success:function (data) {
+                    alert(data);
+                    if( data === '新闻发布成功'){
+                        window.location.href = '/questionlist/'
+                    }
+                },
+                fail:function (errors) {
+                    console.log(errors)
+                }
+            })
+        });
+
+        $("#undo").click(function (event) {
+            event.preventDefault();
+            window.location.href = '/addquestion/'
+
+        })
+
+    })
+    </script>
+{% endblock js %}

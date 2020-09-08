@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+<meta charset="UTF-8">
+<title>注册</title>
+
+
+{#<!-- 最新版本的 Bootstrap 核心 CSS 文件 -->#}
+{#<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" >#}
+{#<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->#}
+{#<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" ></script>#}
+<script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='department/regist/css/style.css') }}">
+
+</head>
+<body>
+
+<div class="container">
+	<div class="header">
+		<h2>注册会员</h2>
+	</div>
+	<form action="" id="form" class="form" method="post">
+
+		<div class="form-control">
+			<label for="username">用户名</label>
+			<input type="text" placeholder="用户名" name="name" id="username" />
+			<i class="fas fa-check-circle"></i>
+			<i class="fas fa-exclamation-circle"></i>
+			<small>Error message</small>
+		</div>
+		<div class="form-control">
+			<label for="username">邮箱</label>
+			<input type="email" placeholder="请输有效入邮箱" name="email" id="email" />
+			<i class="fas fa-check-circle"></i>
+			<i class="fas fa-exclamation-circle"></i>
+			<small>Error message</small>
+		</div>
+		<div class="form-control">
+			<label for="username">密码</label>
+			<input type="password" placeholder="密码" name="password" id="password"/>
+			<i class="fas fa-check-circle"></i>
+			<i class="fas fa-exclamation-circle"></i>
+			<small>Error message</small>
+		</div>
+		<div class="form-control">
+			<label for="username">确认密码</label>
+			<input type="password" placeholder="确认密码" id="password2" name="password2"/>
+			<i class="fas fa-check-circle"></i>
+			<i class="fas fa-exclamation-circle"></i>
+
+			<small>Error message</small>
+		</div>
+
+		<button id="submit">提交</button>
+
+	</form>
+    <div class="link-box">
+        <a style='text-decoration: none' href="{{ url_for('department.login') }}">已有账户，立即登录</a>
+    </div>
+
+</div>
+<style>
+    .link-box{
+        text-align: center;
+        padding-bottom: 20px;
+
+    }
+    .link-box a{
+        display: inline-block;
+    }
+</style>
+
+{#<script src="{{ url_for('static',filename='department/js/script.js') }}"></script>#}
+<script>
+    $(function () {
+        $("#submit").click(function (event) {
+            event.preventDefault();
+
+            var name = $("input[name=name]").val();
+            var email = $("input[name=email]").val();
+            var password = $("input[name=password]").val();
+            var password2 = $("input[name=password2]").val();
+
+
+            $.post({
+                url:'/department/regist/',
+                data:{
+                    name:name,
+                    email:email,
+                    password:password,
+                    password2:password2
+                },
+                success:function (data) {
+                    alert(data)
+                },
+                fail:function (errors) {
+                    console.log(errors)
+                }
+            });
+
+        });
+
+
+    });
+    
+
+</script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+{% extends 'superadmin/base.html' %} 
+
+{% block main %}
+
+      
+    <div class="container-fluid">
+      
+      <div class="row">
+        <div class="col-sm-6 col-lg-3">
+          <div class="card bg-primary">
+            <div class="card-body clearfix">
+              <div class="pull-right">
+                <p class="h6 text-white m-t-0">部门数量</p>
+                <p class="h3 text-white m-b-0">{{ g.departments | mylen}}</p>
+              </div>
+              <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-church fa-1-5x"></i></span> </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-sm-6 col-lg-3">
+          <div class="card bg-danger">
+            <div class="card-body clearfix">
+              <div class="pull-right">
+                <p class="h6 text-white m-t-0">用户总数</p>
+                <p class="h3 text-white m-b-0">{{ g.users | mylen}}</p>
+              </div>
+              <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-account fa-1-5x"></i></span> </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-sm-6 col-lg-3">
+          <div class="card bg-success">
+            <div class="card-body clearfix">
+              <div class="pull-right">
+                <p class="h6 text-white m-t-0">新闻总数</p>
+                <p class="h3 text-white m-b-0">{{ g.newss | mylen }}</p>
+              </div>
+              <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-comment-text fa-1-5x"></i></span> </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-sm-6 col-lg-3">
+          <div class="card bg-purple">
+            <div class="card-body clearfix">
+              <div class="pull-right">
+                <p class="h6 text-white m-t-0">栏目数量</p>
+                <p class="h3 text-white m-b-0">{{ g.tags | mylen }}</p>
+              </div>
+              <div class="pull-left"> <span class="img-avatar img-avatar-48 bg-translucent"><i class="mdi mdi-comment-outline fa-1-5x"></i></span> </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        
+        <div class="col-lg-6"> 
+          <div class="card">
+            <div class="card-header">
+              <h4>部门活跃度</h4>
+            </div>
+            <div class="card-body">
+              <canvas class="js-chartjs-bars"></canvas>
+            </div>
+          </div>
+        </div>
+        
+        <div class="col-lg-6"> 
+          <div class="card">
+            <div class="card-header">
+              <h4>用户活跃度</h4>
+            </div>
+            <div class="card-body">
+              <canvas class="js-chartjs-lines"></canvas>
+            </div>
+          </div>
+        </div>
+         
+      </div>
+      
+     
+    </div>
+    <div style="visibility: hidden;" id="department_data">{{ g.department_list }}</div>
+    <div style="visibility: hidden;" id="department_news_num">{{ g.department_news_list }}</div>
+    <div style="visibility: hidden;" id="user_num_list">{{ g.user_num_list }}</div>
+    <div style="visibility: hidden;" id="user_active_list">{{ g.user_active_list }}</div>
+{% endblock main %}
+
+
+{% block js %}
+
+<script type="text/javascript">
+
+
+    
+$(document).ready(function(e) {
+
+    var $dashChartBarsCnt  = jQuery( '.js-chartjs-bars' )[0].getContext( '2d' ),
+        $dashChartLinesCnt = jQuery( '.js-chartjs-lines' )[0].getContext( '2d' );
+
+    var department_name = $('#department_data').text();
+    var department_news_num = $('#department_news_num').text();
+    var user_num_list = $('#user_num_list').text();
+    var user_active_list = $('#user_active_list').text();
+    var $dashChartBarsData = {
+		labels: JSON.parse(department_name),
+		datasets: [
+			{
+				label: '发稿量',
+                borderWidth: 1,
+                borderColor: 'rgba(0,0,0,0)',
+				backgroundColor: 'rgba(51,202,185,0.5)',
+                hoverBackgroundColor: "rgba(51,202,185,0.7)",
+                hoverBorderColor: "rgba(0,0,0,0)",
+				data: JSON.parse(department_news_num)
+			}
+		]
+	};
+
+
+    var $dashChartLinesData = {
+		labels: JSON.parse(user_num_list) ,
+		datasets: [
+			{
+				label: '发帖量',
+				data: JSON.parse(user_active_list) ,
+				borderColor: '#358ed7',
+				backgroundColor: 'rgba(53, 142, 215, 0.175)',
+                borderWidth: 1,
+                fill: false,
+                lineTension: 0.5
+			}
+		]
+	};
+    
+    new Chart($dashChartBarsCnt, {
+        type: 'bar',
+        data: $dashChartBarsData
+    });
+    
+    var myLineChart = new Chart($dashChartLinesCnt, {
+        type: 'line',
+        data: $dashChartLinesData,
+    });
+});
+</script>
+{% endblock js %}

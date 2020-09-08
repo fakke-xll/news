@@ -1,0 +1,103 @@
+{% extends 'department/base.html' %} {% block main %}
+<!-- <div class="col-md-1"></div> -->
+<div class="col-md-6">
+  <div class="card">
+    <form
+      class="form-horizontal"
+      action="#"
+      method="post"
+      enctype="multipart/form-data"
+      onsubmit="return false;"
+    >
+      <div class="card-body">
+        <div class="form-group">
+          <label class="col-xs-12" for="example-password-input">密码</label>
+          <div class="col-xs-12">
+            <input
+              class="form-control"
+              type="password"
+              name="oldpwd"
+              placeholder="密码.."
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12" for="example-password-input">密码</label>
+          <div class="col-xs-12">
+            <input
+              class="form-control"
+              type="password"
+              name="newpwd1"
+              placeholder="密码.."
+            />
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="col-xs-12" for="example-password-input">密码</label>
+          <div class="col-xs-12">
+            <input
+              class="form-control"
+              type="password"
+              name="newpwd2"
+              placeholder="密码.."
+            />
+          </div>
+        </div>
+        <div class="example-box" style="text-align: center;">
+          <button class="btn btn-label btn-primary" id="pwd-confirm">
+            <label
+              ><i class="mdi mdi-checkbox-marked-circle-outline" ></i
+            ></label>
+            确认修改
+          </button>
+          
+          <button class="btn btn-label btn-secondary">
+            <label><i class="mdi mdi-close"></i></label> 取消
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock main %} 
+{% block js %} 
+
+<script>
+
+    // 修改密码的数据提交的后台
+    $(function(){
+        $('#pwd-confirm').click(function(event){
+            event.preventDefault();
+            var oldpwd = $("input[name=oldpwd]").val();
+            var newpwd1 = $("input[name=newpwd1]").val();
+            var newpwd2 = $("input[name=newpwd2]").val();
+
+            $.ajax({
+                url:'/department/updatepwd/',
+                type:'post',
+                data:{
+                    oldpwd:oldpwd,
+                    newpwd1:newpwd1,
+                    newpwd2:newpwd2
+                },
+                success:function(data){
+                    if(data === "修改成功"){
+                        alert(data);
+                        window.location.href = '/department/updatepwd/'
+                    }
+                },
+                fail:function(errors){
+                    window.location.href = '/department/updatepwd/'
+                }
+                
+            })
+
+
+
+        })
+
+    })
+</script>
+
+
+{% endblock js %}

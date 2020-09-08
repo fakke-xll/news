@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+	<title>演示：紫色背景简洁登陆页面</title>
+	<meta charset="utf-8">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='department/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='department/login/css/util.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='department/login/css/main.css') }}">
+</head>
+
+<body>
+<div class="dowebok">
+	<div class="container-login100">
+
+		<div class="wrap-login100">
+			<div class="login100-pic js-tilt" data-tilt>
+				<img src="{{ url_for('static',filename='department/login/images/img-01.png') }}" alt="IMG">
+			</div>
+
+			<form class="login100-form validate-form" method="post">
+                <span class="login100-form-title">
+					欢迎来到新闻管理后台
+				</span>
+				<span class="login100-form-title">
+					会员登陆
+				</span>
+
+				<div class="wrap-input100 validate-input">
+					<input class="input100" type="email" name="email" placeholder="邮箱">
+					<span class="focus-input100"></span>
+					<span class="symbol-input100">
+						<i class="fa fa-envelope" aria-hidden="true"></i>
+					</span>
+				</div>
+
+				<div class="wrap-input100 validate-input">
+					<input class="input100" type="password" name="password" placeholder="密码">
+					<span class="focus-input100"></span>
+					<span class="symbol-input100">
+						<i class="fa fa-lock" aria-hidden="true"></i>
+					</span>
+				</div>
+				
+				<div class="container-login100-form-btn">
+<!-- {#                    <a style="text-decoration: none;display: block" href="{{ url_for("department.index") }}">#} -->
+                        <button class="login100-form-btn" id="submit">
+                             登陆
+                        </button>
+<!-- {#                    </a>#} -->
+
+				</div>
+
+				<div class="text-center p-t-136">
+					<a class="txt2" href="{{ url_for('department.regist') }}">
+							还没有账号？立即注册
+						<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+					</a>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script>
+    $(function () {
+        $("#submit").click(function (event) {
+            event.preventDefault();
+
+            var email = $("input[name=email]").val();
+            var password = $("input[name=password]").val();
+
+            $.post({
+                url:'/department/login/',
+                data:{
+                    email:email,
+                    password:password
+                },
+                success:function (data) {
+					
+                    if(data === '登录成功'){
+                        window.location.href = '/department/'
+                    }else{
+						alert(data);
+					}
+
+                },
+                fail:function (errors) {
+                    alert(errors);
+					window.location.href = '/department/login/'
+                }
+            })
+
+
+        })
+
+    })
+</script>
+
+
+</body>
+</html>

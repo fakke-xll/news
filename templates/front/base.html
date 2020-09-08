@@ -1,0 +1,201 @@
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <title>新闻管理系统</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
+        <meta content="Coderthemes" name="author" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+        <!-- App favicon -->
+        <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+        <!-- App css -->
+        <link href="{{ url_for('static',filename='front/base/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static',filename='front/base/css/icons.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static',filename='front/base/css/style.css') }}" rel="stylesheet" type="text/css" />
+
+        <script src="{{ url_for('static',filename='front/base/js/modernizr.min.js') }}"></script>
+        {% block head %}
+        
+        {% endblock head %}
+    </head>
+
+    <body style="background-color: aliceblue;">
+        
+        <!-- Navigation Bar-->
+        <header id="topnav">
+            <div class="topbar-main">
+                <div class="container-fluid">
+
+                   
+
+                    
+                    <!-- end menu-extras -->
+
+                    <div class="clearfix"></div>
+
+                </div> <!-- end container -->
+            </div>
+            <!-- end topbar-main -->
+
+            <div class="navbar-custom">
+                <div class="container-fluid">
+                    <div id="navigation">
+                        <!-- Navigation Menu-->
+                        <ul class="navigation-menu">
+
+                            <li class="has-submenu">
+                                <a href="{{ url_for('front.index') }}"><i class="icon-speedometer"></i>新闻主页</a>
+                            </li>
+
+                            
+
+                            <li class="has-submenu">
+                                <a href="#"><i class="icon-layers"></i>新闻栏目</a>
+                                <ul class="submenu">
+                                    {% for tag in g.tags %}
+                                    {% if tag.is_delete == 0 %}
+                                    <li><a href="{{ url_for('front.tagnews',tag_id=tag.id) }}">{{ tag.name }}</a></li>
+                                    {% endif %}
+                                  
+                                    {% endfor %}   
+                                </ul>
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="#" ><i class="icon-briefcase"></i>发布部门</a>
+                                <ul class="submenu megamenu">
+                                    <li>
+                                        <ul>
+                                            {% for department in g.departments %}
+                                            {% if department.is_delete == 0 %}
+                                            <li class="department_id" id="{{ department.id }}"><a href="{{ url_for('front.depnews',department_id=department.id) }}">{{ department.name }}</a></li>
+                                            {% endif %}   
+                                            {% endfor %}
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+
+                            
+
+                            <li class="has-submenu float-right">
+                               {% if g.current_user %}
+                               <a  href="#" style="color:black">{{ g.current_user.email }}<i class="mdi mdi-chevron-down"></i></a>
+                               {% else %}
+                               <a  href="#" style="color:black">登录<i class="mdi mdi-chevron-down"></i></a>
+                               {% endif %}
+
+                                    <ul class="submenu megamenu">
+                                        <li>
+                                            <ul>
+                                                
+                                                 
+                                                <li><a href="{{ url_for('front.mypage') }}"></i>我的账户</a></li>
+                                                
+                                                <li><a href="{{ url_for('front.logout') }}">退出</a></li>
+                                                
+                                            </ul>
+                                        </li>
+                                        
+                                    </ul>
+                               
+                               
+                            </li>
+
+                            <li class="has-submenu">
+                                <a href="{{ url_for('front.questionlist') }}" ><i class="icon-briefcase"></i>问答主页</a>
+                                
+                            </li>
+                            <li class="has-submenu">
+                                <a href="{{ url_for('front.mypage') }}" ><i class="icon-briefcase"></i>个人主页</a>
+                            </li>
+
+                           
+
+                        </ul>
+                        
+                        <!-- End navigation menu -->
+
+                        
+                    </div> <!-- end #navigation -->
+                    
+                </div> <!-- end container -->
+            </div> <!-- end navbar-custom -->
+        </header>
+        <!-- End Navigation Bar-->
+
+
+        <div class="wrapper" style="margin-top: 65px;padding-top: 0;">
+            <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-md-8">
+                            {% block main_left %}
+                            
+                            {% endblock main_left %}
+                        </div>
+                        <div class="col-md-4 mt-md-30" style="background-color:linen;" >
+                            <div class="card" style="margin-top: 10px;">
+                                    
+                                <div class="card-body" style="position: fixed;">
+                                    <div class="icons_0" style="color: #8590a6;margin: 10px;height: 30px;font-size: 20px;"><i class="mdi mdi-checkbox-multiple-blank-outline"></i><a href="{{ url_for('front.mycomment') }}"><span >我评论的</span></a></div>
+                                    <div class="icons_0" style="color: #8590a6;margin: 10px;height: 30px;font-size: 20px;"><i class="mdi mdi-checkbox-multiple-blank-outline"></i><a href="{{ url_for('front.addquestion') }}"><span >发布问答</span></a></div>
+                                    <div class="icons_0" style="color: #8590a6;margin: 10px;height: 30px;font-size: 20px;"><i class="mdi mdi-checkbox-multiple-blank-outline"></i><a href="{{ url_for('front.myquestion') }}"><span >我的发布</span></a></div>
+                                    <div class="icons_0" style="color: #8590a6;margin: 10px;height: 30px;font-size: 20px;"><i class="mdi mdi-checkbox-multiple-blank-outline"></i><a href="{{ url_for('front.myanswer') }}"><span >我的回答</span></a></div>
+                                </div>
+                              </div>
+                            
+                         
+                                  
+                               
+                            {% block main_right %}
+                            {% endblock main_right %}
+                        </div>
+                    </div>
+                </div>
+                   
+            </div>   
+            </div>
+           
+        </div>
+        <!-- end wrapper -->
+        {% block main %}
+        
+        {% endblock main %}
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 text-center">
+                        2020 © xiangliangliang. - newssystem.com
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer -->
+
+
+        <!-- jQuery  -->
+        <script src="{{ url_for('static',filename='front/base/js/jquery.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/base/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/base/js/waves.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/base/js/jquery.slimscroll.js') }}"></script>
+
+        <!-- App js -->
+        <script src="{{ url_for('static',filename='front/base/js/jquery.core.js') }}"></script>
+        <script src="{{ url_for('static',filename='front/base/js/jquery.app.js') }}"></script>
+       
+        
+        {% block js %}
+        
+        {% endblock js %}
+
+       
+    </body>
+</html>

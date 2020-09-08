@@ -1,0 +1,24 @@
+{% extends 'front/base.html' %}
+{% block main_left %}
+    
+{% for question in g.questions %}
+<a href="{{ url_for('front.questiondetail',question_id=question.id) }}" style="text-decoration: none;">
+<div class="card-box" style="margin-top: 10px;margin-bottom: 10px;padding-top: 10px;">
+    <span class="badge badge-custom">{{ question.tag.name }}</span>
+    <span class="header-title" style="font-size: 13px;margin-left: 10px;padding-top: 2px;" >{{ question.title }}</span>
+    <p class="text-muted m-b-20 font-14">   
+        {{ question.content }}
+    </p> 
+    <span class="badge badge-info">提问人：{{ question.user.name }}</span>
+    <span class="badge badge-purple" style="float: right;"></span>提问时间：{{ question.addtime }}</span>
+    <span class="badge badge-success" style="float: right;margin-right: 20px;">回答：{{ question.answers | mylen }}</span>
+    <!-- <span class="badge badge-custom"><div style="width: 100px;height: 0;"></div></span> -->
+
+</div>
+</a>
+{% endfor %}
+
+    
+    
+{% endblock main_left %}
+

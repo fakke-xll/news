@@ -1,0 +1,68 @@
+{% extends 'front/base.html' %}
+{% block main_left %}
+    
+<div class="card">
+    <div class="card-toolbar clearfix">
+     
+      <div class="toolbar-btn-action" style="margin-top: 10px;">
+     
+     
+      </div>
+    </div>
+    <div class="card-body">
+      
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+           
+              <th>编号</th>
+              <th>标题</th>
+              <th>栏目</th>
+              <th>回复量</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for question in g.questions %}
+            <tr class="tr">
+            
+              <td class="number">1</td>
+              <td><a href="{{ url_for('front.questiondetail',question_id=question.id) }}" style="text-decoration: none;"> {{ question.title }}</a></td>
+              <td>{{ question.tag.name  }}</td>
+              <td>{{ question.answers | length }}</td>
+              
+              
+              <td>
+                <div class="btn-group">
+                  <a class="btn btn-sm btn-danger" href="#!" title="" data-toggle="tooltip" ><i class="mdi mdi-window-close"></i>删除</a>
+                </div>
+              </td> 
+            </tr>
+            {% endfor %}
+            
+          </tbody>
+        </table>
+      </div>
+    
+
+    </div>
+  </div>
+
+    
+    
+{% endblock main_left %}
+
+{% block js %}
+<script>
+  $(function() {
+    function number() {
+      for (var i = 0; i <= $(".tr").length; i++) {
+        $(".number").get(i).innerHTML = i + 1;
+      }
+    }
+    number();  
+  });
+</script>
+{% endblock js %}
+

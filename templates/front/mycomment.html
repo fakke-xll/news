@@ -1,0 +1,130 @@
+{% extends 'front/base.html' %}
+{% block main_left %}
+    
+<div class="card">
+    <div class="card-toolbar clearfix">
+     
+      <div class="toolbar-btn-action" style="margin-top: 10px;">
+      
+      </div>
+    </div>
+    <div class="card-body">
+      
+      <div class="table-responsive">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+           
+              <th>编号</th>
+              <th>新闻标题</th>
+              <th>发布部门</th>
+              
+              <th>我的回复</th>
+              <th>回复时间</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for comment in g.current_user.comments %}
+            {% if comment.is_delete == 0 %}
+            <tr class="tr" data-id="{{ comment.id }}">
+             
+              <td class="number"></td>
+              <td><a href="{{ url_for('front.newsdetail',news_id=comment.news.id) }}">{{ comment.news.title }}</a></td>
+              <td>{{ comment.news.department.name }}</td>
+           
+              <td>{{ comment.content }}</td>
+              <td>{{ comment.addtime }}</td>
+              
+              <td>
+                <button type="button" class="btn btn-danger btn-sm delete-btn" data-toggle="modal" data-target="#myDelModal">
+                  删除
+                </button>
+                
+                <div class="modal fade" id="myDelModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <form action="" method="post">  
+                      <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">确认删除这条回复！</h4>
+                      </div>
+                      <div class="modal-body">
+                          <h4 class="modal-title" id="myModalLabel">删除后将不能恢复</h4>
+                          </div>
+
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                        <button type="button" class="btn btn-primary " id='delete-confirm-btn'>确认删除</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </form>
+              </td> 
+            </tr>
+            {% endif %}
+           
+            {% endfor %}
+           
+            
+          </tbody>
+        </table>
+      </div>
+    
+
+    </div>
+  </div>
+
+    
+    
+{% endblock main_left %}
+
+{% block js %}
+<script>
+$(function() {
+  function number() {
+    for (var i = 0; i <= $(".tr").length; i++) {
+      $(".number").get(i).innerHTML = i + 1;
+    }
+  }
+
+  number();
+  
+});
+
+
+$(function(){
+    $(".delete-btn").click(function(event){
+        event.preventDefault();
+        var self = $(this);
+        var tr = self.parent().parent();
+        var comment_id= tr.attr("data-id");
+    
+        $('#delete-confirm-btn').click(function (event) {
+            event.preventDefault();
+    
+    
+            $.ajax({
+                url:'/mycomment/',
+                type:'post',
+                data:{
+                  is_delete:1,
+                  comment_id:comment_id
+                },
+                success:function(data){
+                    if(data === "删除成功"){
+                      window.location.href = '/mycomment/';
+                    }
+                },
+                fail:function(){
+
+                  }
+                })
+            })
+        })
+})
+
+</script>
+{% endblock js %}
+
